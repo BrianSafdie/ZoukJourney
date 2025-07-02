@@ -30,7 +30,7 @@
     
     // פונקציה לטעינת רקדנים
     function loadDancers() {
-      fetch('http://127.0.0.1:5000/api/dancers')
+      fetch('http://127.0.0.1:5050/api/dancers')
         .then(response => response.json())
         .then(data => {
           const list = document.getElementById('dancer-list');

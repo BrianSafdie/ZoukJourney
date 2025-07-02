@@ -1,9 +1,0 @@
-@echo off
-echo Killing any process on port 5000...
-for /f "tokens=5" %%a in ('netstat -aon ^| findstr :5000 ^| findstr LISTENING') do taskkill /PID %%a /F >nul 2>&1
-
-echo Activating virtual environment...
-call env\Scripts\activate.bat
-
-echo Starting Flask server...
-py app.py
