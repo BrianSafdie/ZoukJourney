@@ -1,12 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Zouk Journey - Home</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Zouk Dancers</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Welcome to Zouk Journey</h1>
-  <button onclick="window.location.href='about.html'">Go to the next page</button>
+  <h1>Dancer List</h1>
+
+  <button id="load-btn">Load Dancers</button>
+  <button id="next-page-btn">Go to About Page</button>
+  <button id="third-page-btn">Go to Third Page</button>
+
+  <ul id="dancer-list"></ul>
+
+  <script>
+        const appName = "Zouk Journey";
+    let welcomeMessage = "Welcome to " + appName;
+
+    console.log(welcomeMessage);
+    
+    function greet(name) {
+        console.log("Welcome, " + name + "!");
+      }
+
+      greet("Brian");  // Welcome, Brian!
+      greet("Alice");  // Welcome, Alice!
+
+    
+    // פונקציה לטעינת רקדנים
+    function loadDancers() {
+      fetch('http://127.0.0.1:5000/api/dancers')
+        .then(response => response.json())
+        .then(data => {
+          const list = document.getElementById('dancer-list');
+          list.innerHTML = '';
+          data.forEach(dancer => {
+            const li = document.createElement('li');
+            li.textContent = `${dancer.name} - ${dancer.level}`;
+            list.appendChild(li);
+          });
+        })
+        .catch(error => console.error('Error loading dancers:', error));
+    }
+
+    // מאזינים לאירועים על הכפתורים
+    document.getElementById('load-btn').addEventListener('click', loadDancers);
+
+    document.getElementById('next-page-btn').addEventListener('click', () => {
+      window.location.href = 'about.html';
+    });
+
+    document.getElementById('third-page-btn').addEventListener('click', () => {
+      window.location.href = 'third.html';
+    }); 
+  </script>
 </body>
 </html>
