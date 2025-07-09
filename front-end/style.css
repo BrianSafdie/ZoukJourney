@@ -11,15 +11,23 @@ h1 {
 }
 
 button {
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: #2980b9;
+  padding: 12px 24px;
+  margin: 10px;
+  background-color: #0077cc;
   color: white;
+  font-size: 16px;
   border: none;
-  border-radius: 5px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, background-color 0.3s ease;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #3498db;
+  background-color: #7abae7;
+  transform: scale(1.07);
+}
+
+button:active {
+  transform: scale(0.97);
 }

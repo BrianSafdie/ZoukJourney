@@ -2,35 +2,66 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Zouk Dancers</title>
+  <title>Zouk Journey</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
-<body>
-  <h1>Dancer List</h1>
 
+<body>
+  <h1>Zouk Journey</h1>
+  <!-- Buttons -->
   <button id="load-btn">Load Dancers</button>
   <button id="next-page-btn">Go to About Page</button>
   <button id="third-page-btn">Go to Third Page</button>
 
+  <!-- Google Sign-In -->
+  <div id="g_id_onload"
+       data-client_id="707475720698-omp6m2gnpm6huagif3gck0t78rm1roq6.apps.googleusercontent.com"
+       data-callback="handleCredentialResponse"
+       data-auto_prompt="false">
+  </div>
+
+  <div class="g_id_signin"
+       data-type="standard"
+       data-size="large"
+       data-theme="outline"
+       data-text="sign_in_with"
+       data-shape="rectangular"
+       data-logo_alignment="left">
+  </div>
+
   <ul id="dancer-list"></ul>
 
   <script>
-        const appName = "Zouk Journey";
-    let welcomeMessage = "Welcome to " + appName;
+    // ✅ Google Sign-In callback
+    function handleCredentialResponse(response) {
+      const jwt = response.credential;
+      const payload = JSON.parse(atob(jwt.split('.')[1]));
+      console.log("User info:", payload);
+      alert(`Welcome ${payload.name}!`);
 
-    console.log(welcomeMessage);
+      fetch('https://zoukjourney-back-end.onrender.com/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ token: jwt })
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Login response:", data);
+      })
+      .catch(err => {
+        console.error("Login error:", err);
+      });
     
-    function greet(name) {
-        console.log("Welcome, " + name + "!");
-      }
-
-      greet("Brian");  // Welcome, Brian!
-      greet("Alice");  // Welcome, Alice!
+    }
 
     
-    // פונקציה לטעינת רקדנים
+
+    // ✅ Load dancers from back-end
     function loadDancers() {
-      fetch('http://127.0.0.1:5050/api/dancers')
+      fetch('https://zoukjourney-back-end.onrender.com/api/dancers')
         .then(response => response.json())
         .then(data => {
           const list = document.getElementById('dancer-list');
@@ -44,7 +75,18 @@
         .catch(error => console.error('Error loading dancers:', error));
     }
 
-    // מאזינים לאירועים על הכפתורים
+    // ✅ App logic
+    const appName = "Zouk Journey";
+    console.log("Welcome to " + appName);
+
+    function greet(name) {
+      console.log("Welcome, " + name + "!");
+    }
+
+    greet("Brian");
+    greet("Alice");
+
+    // ✅ Event listeners
     document.getElementById('load-btn').addEventListener('click', loadDancers);
 
     document.getElementById('next-page-btn').addEventListener('click', () => {
@@ -53,7 +95,7 @@
 
     document.getElementById('third-page-btn').addEventListener('click', () => {
       window.location.href = 'third.html';
-    }); 
+    });
   </script>
 </body>
 </html>
