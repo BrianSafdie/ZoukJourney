@@ -9,6 +9,9 @@
 
 <body>
   <h1>Zouk Journey</h1>
+
+  <!-- Welcome message and logout button will appear here -->
+  
   <!-- Buttons -->
   <button id="load-btn">Load Dancers</button>
   <button id="next-page-btn">Go to About Page</button>
@@ -27,24 +30,27 @@
        data-theme="outline"
        data-text="sign_in_with"
        data-shape="rectangular"
-       data-logo_alignment="left">
+       data-logo_alignment="center">
   </div>
 
   <ul id="dancer-list"></ul>
 
   <script>
-    // ✅ Google Sign-In callback
+    // Google Sign-In callback
     function handleCredentialResponse(response) {
       const jwt = response.credential;
       const payload = JSON.parse(atob(jwt.split('.')[1]));
       console.log("User info:", payload);
       alert(`Welcome ${payload.name}!`);
 
+      // שמירת הטוקן ופרטי המשתמש ב-localStorage
+      localStorage.setItem('token', jwt);
+      localStorage.setItem('userName', payload.name);
+
+      // שליחת הטוקן לשרת לצורך אימות (לפי מה שכבר עשית)
       fetch('https://zoukjourney-back-end.onrender.com/api/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: jwt })
       })
       .then(res => res.json())
@@ -54,12 +60,66 @@
       .catch(err => {
         console.error("Login error:", err);
       });
-    
+
+      // עדכון הממשק אחרי התחברות
+      updateUIAfterLogin(payload.name);
     }
 
-    
+    // טעינת הדף - בדיקת התחברות קיימת
+    window.onload = function() {
+      const token = localStorage.getItem('token');
+      const userName = localStorage.getItem('userName');
 
-    // ✅ Load dancers from back-end
+      if (token && userName) {
+        console.log(`User ${userName} is already logged in.`);
+        updateUIAfterLogin(userName);
+      }
+    };
+
+    // עדכון UI אחרי התחברות
+    function updateUIAfterLogin(userName) {
+      // הסתרת כפתור ההתחברות של גוגל
+      const googleButton = document.querySelector('.g_id_signin');
+      if (googleButton) googleButton.style.display = 'none';
+
+      // יצירת והצגת הודעת ברוך הבא
+      let welcomeDiv = document.getElementById('welcome-message');
+      if (!welcomeDiv) {
+        welcomeDiv = document.createElement('div');
+        welcomeDiv.id = 'welcome-message';
+        document.body.insertBefore(welcomeDiv, document.body.firstChild);
+      }
+      welcomeDiv.textContent = `שלום, ${userName}!`;
+
+      // יצירת כפתור התנתקות אם לא קיים
+      let logoutBtn = document.getElementById('logout-btn');
+      if (!logoutBtn) {
+        logoutBtn = document.createElement('button');
+        logoutBtn.id = 'logout-btn';
+        logoutBtn.textContent = 'התנתק';
+        welcomeDiv.after(logoutBtn);
+        logoutBtn.addEventListener('click', logout);
+      }
+    }
+
+    // פונקציית התנתקות
+    function logout() {
+      // מחיקת נתוני התחברות
+      localStorage.removeItem('token');
+      localStorage.removeItem('userName');
+
+      // החזרת כפתור ההתחברות
+      const googleButton = document.querySelector('.g_id_signin');
+      if (googleButton) googleButton.style.display = 'block';
+
+      // הסרת הודעת ברוך הבא וכפתור ההתנתקות
+      const welcomeDiv = document.getElementById('welcome-message');
+      if (welcomeDiv) welcomeDiv.remove();
+      const logoutBtn = document.getElementById('logout-btn');
+      if (logoutBtn) logoutBtn.remove();
+    }
+
+    // טעינת רקדנים מהשרת
     function loadDancers() {
       fetch('https://zoukjourney-back-end.onrender.com/api/dancers')
         .then(response => response.json())
@@ -75,18 +135,7 @@
         .catch(error => console.error('Error loading dancers:', error));
     }
 
-    // ✅ App logic
-    const appName = "Zouk Journey";
-    console.log("Welcome to " + appName);
-
-    function greet(name) {
-      console.log("Welcome, " + name + "!");
-    }
-
-    greet("Brian");
-    greet("Alice");
-
-    // ✅ Event listeners
+    // מאזיני אירועים לכפתורים
     document.getElementById('load-btn').addEventListener('click', loadDancers);
 
     document.getElementById('next-page-btn').addEventListener('click', () => {
@@ -96,6 +145,7 @@
     document.getElementById('third-page-btn').addEventListener('click', () => {
       window.location.href = 'third.html';
     });
+
   </script>
 </body>
 </html>
