@@ -8,30 +8,34 @@
 </head>
 
 <body>
-  <h1>Zouk Journey</h1>
-
+  <div class="header-container">
+    <h1>Zouk Journey</h1>
+  </div>
+  
   <!-- Welcome message and logout button will appear here -->
   
   <!-- Buttons -->
-  <button id="load-btn">Load Dancers</button>
-  <button id="next-page-btn">Go to About Page</button>
-  <button id="third-page-btn">Go to Third Page</button>
-
+   <div class="buttons-container">
+    <button id="load-btn">Load Dancers</button>
+    <button id="next-page-btn">Go to About Page</button>
+    <button id="third-page-btn">Go to Third Page</button>
+   </div>
   <!-- Google Sign-In -->
   <div id="g_id_onload"
        data-client_id="707475720698-omp6m2gnpm6huagif3gck0t78rm1roq6.apps.googleusercontent.com"
        data-callback="handleCredentialResponse"
        data-auto_prompt="false">
   </div>
-
+<div style="display: flex; justify-content: center; margin-top: 50px;">
   <div class="g_id_signin"
        data-type="standard"
        data-size="large"
        data-theme="outline"
        data-text="sign_in_with"
        data-shape="rectangular"
-       data-logo_alignment="left">
-  </div>
+       data-logo_alignment="right"
+       data-width="100">
+  </div></div>
 
   <ul id="dancer-list"></ul>
 

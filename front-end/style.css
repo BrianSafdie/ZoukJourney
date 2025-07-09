@@ -7,7 +7,17 @@ body {
 }
 
 h1 {
-  color: #2c3e50;
+  display: inline-block; /* כדי שהרקע יתאים לגודל התוכן */
+  background-color: #ffffff; /* צבע רקע שאתה בוחר */
+  padding: 8px 16px; /* ריווח פנימי */
+  border-radius: 8px; /* פינות מעוגלות (לא חובה) */
+  color: #2c3e50; /* צבע טקסט */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* צל עדין */
+  margin: auto;
+}
+
+.header-container {
+  margin-bottom: 30px; /* ריווח בין הכותרת לכפתורים */
 }
 
 button {
@@ -24,10 +34,14 @@ button {
 }
 
 button:hover {
-  background-color: #7abae7;
+  background-color: #4da8e8;
   transform: scale(1.07);
 }
 
 button:active {
   transform: scale(0.97);
+}
+
+.buttons-container {
+   margin-bottom: 30px; 
 }
