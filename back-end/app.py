@@ -1,6 +1,8 @@
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 import os
-from flask import Flask, jsonify, request
+from google.oauth2 import id_token
+from google.auth.transport import requests as grequests
 
 app = Flask(__name__)
 CORS(app)
@@ -17,8 +19,28 @@ def get_dancers():
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
-    # Validate token here...
-    return jsonify({"message": "Login successful!"})
+    token = data.get('token')
+
+    try:
+        # שים פה את ה־CLIENT_ID שלך שקיבלת מ־Google Cloud Console
+        CLIENT_ID = "707475720698-omp6m2gnpm6huagif3gck0t78rm1roq6.apps.googleusercontent.com"
+        idinfo = id_token.verify_oauth2_token(token, grequests.Request(), CLIENT_ID)
+
+        # אימות תקין, חילוץ מידע משתמש
+        user_id = idinfo['sub']
+        user_email = idinfo['email']
+        user_name = idinfo.get('name')
+
+        # כאן אפשר לשמור את המשתמש במסד נתונים או לנהל סשן
+        return jsonify({
+            "message": f"Welcome {user_name}!",
+            "email": user_email,
+            "user_id": user_id
+        })
+
+    except ValueError:
+        # הטוקן אינו תקין
+        return jsonify({"error": "Invalid token"}), 401
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
