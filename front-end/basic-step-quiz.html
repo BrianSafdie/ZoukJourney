@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Basic Step - Quiz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <style>
+    .status-msg {font-weight: bold; margin: 15px 0;}
+    .hidden {display: none;}
+    button {margin-top: 10px;}
+  </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Basic Step - Quiz</h1>
+      <p class="description">Answer all questions right to continue to the next part!</p>
+      
+      <div id="quiz-container">  
+        <div id="q1">
+          <p>1. What is the rhythm of Brazilian Zouk basic step?</p>
+            <label><input type="radio" name="q1" value="a"> Slow-Slow</label><br>
+            <label><input type="radio" name="q1" value="b"> Quick-Quick-Slow</label><br>
+            <label><input type="radio" name="q1" value="c"> Slow-Quick-Quick</label>
+            <button type="button" onclick="checkQuestion1()">Next</button>
+
+        </div>
+        
+        <div id="q2" class="hidden">
+          <p>2. How many steps are in one basic cycle?</p>
+            <label><input type="radio" name="q2" value="a"> 4</label><br>
+            <label><input type="radio" name="q2" value="b"> 6</label><br>
+            <label><input type="radio" name="q2" value="c"> 8</label>
+            <button type="button" onclick="checkQuestion2()">Next</button>
+
+        </div>
+        
+        <p id="quiz-feedback" class="status-msg"></p>
+        <button id="next-btn" class="hidden" onclick="goToNext()">✅ Continue to Next Topic</button>
+      </div>
+    </div>
+
+    <script>
+      function checkQuestion1() {
+        const answer = document.querySelector('input[name="q1"]:checked');
+        const feedback = document.getElementById("quiz-feedback");
+
+        if (!answer) {
+          feedback.innerText = "❗ Please select an answer for Question 1"
+          feedback.style.color = "red";
+          return;
+        }
+
+        if (answer.value === "b") {
+          document.getElementById("q1").classList.add("hidden");
+          document.getElementById("q2").classList.remove("hidden");
+          feedback.innerText = "";
+        } else {
+          feedback.innerText = "❌ Incorrect. Try again!";
+          feedback.style.color = "red";
+        } 
+      }
+
+    function checkQuestion2() {
+        const answer = document.querySelector('input[name="q1"]:checked');
+        const feedback = document.getElementById("quiz-feedback");
+
+        if (!answer) {
+          feedback.innerText = "❗ Please select an answer for Question 1"
+          feedback.style.color = "red";
+          return;
+        }
+
+          if (answer.value === "b") {
+          feedback.innerText = "✅ Great job! All answers are correct!";
+          feedback.style.color = "green";
+          document.getElementById("next-btn").classList.remove("hidden");
+        } else {
+          feedback.innerText = "❌ Incorrect. Try again!";
+          feedback.style.color = "red";
+        } 
+    }
+
+    function goToNext() {
+      window.location.href = "basic-step-plus-way.html";
+    }
+
+    </script>
+  </body>
+</html>
+
