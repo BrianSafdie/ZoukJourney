@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+  <div id="g_id_onload"
+       data-client_id="YOUR_CLIENT_ID"
+       data-callback="handleCredentialResponse"
+       data-auto_prompt="false"></div>
+
+  <div class="g_id_signin"
+       data-type="standard"
+       data-size="large"
+       data-theme="outline"
+       data-text="sign_in_with"
+       data-shape="rectangular"
+       data-logo_alignment="right"
+       data-width="240"></div>
+
+  <script>
+    function handleCredentialResponse(response) {
+      const jwt = response.credential;
+      const payload = JSON.parse(atob(jwt.split('.')[1]));
+      localStorage.setItem('token', jwt);
+      localStorage.setItem('userName', payload.name);
+      // אפשר לשלוח אימות לשרת כאן אם רוצים
+      window.location.href = 'index.html'; // נווט לעמוד הראשי
+    }
+  </script>
+</body>
+</html>

@@ -9,7 +9,9 @@ CORS(app)
 
 dancers = [
     {"id": 1, "name": "Daniel", "level": "Intermediate"},
-    {"id": 2, "name": "Maya", "level": "Beginner"}
+    {"id": 2, "name": "Maya", "level": "Beginner"},
+    {"id": 3, "name": "Raz", "level": "Pro"},
+    {"id": 4, "name": "Brian", "level": "Master"},
 ]
 
 @app.route('/api/dancers', methods=['GET'])

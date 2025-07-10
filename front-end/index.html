@@ -9,49 +9,53 @@
 
 <body>
   <div class="header-container">
+    <p>Welcome to</p>
     <h1>Zouk Journey</h1>
   </div>
   
-  <!-- Welcome message and logout button will appear here -->
-  
-  <!-- Buttons -->
-   <div class="buttons-container">
-    <button id="load-btn">Load Dancers</button>
-    <button id="next-page-btn">Go to About Page</button>
-    <button id="third-page-btn">Go to Third Page</button>
-   </div>
-  <!-- Google Sign-In -->
-  <div id="g_id_onload"
-       data-client_id="707475720698-omp6m2gnpm6huagif3gck0t78rm1roq6.apps.googleusercontent.com"
-       data-callback="handleCredentialResponse"
-       data-auto_prompt="false">
+  <style>
+    .buttons-container {
+      display: none;
+    }
+  </style>
+
+  <div class="buttons-container">
+    <!-- <button id="load-btn">Load Dancers</button> -->
+    <!-- <button id="next-page-btn">Go to About Page</button> -->
+    <!-- <button id="third-page-btn">Go to Third Page</button> -->
+    <button id="basic-step-btn">Start Learning The Basic Step</button>
   </div>
-<div style="display: flex; justify-content: center; margin-top: 50px;">
-  <div class="g_id_signin"
-       data-type="standard"
-       data-size="large"
-       data-theme="outline"
-       data-text="sign_in_with"
-       data-shape="rectangular"
-       data-logo_alignment="right"
-       data-width="100">
-  </div></div>
+
+  <div id="g_id_onload"
+    data-client_id="707475720698-omp6m2gnpm6huagif3gck0t78rm1roq6.apps.googleusercontent.com"
+    data-callback="handleCredentialResponse"
+    data-auto_prompt="false">
+  </div>
+
+  <div style="display: flex; justify-content: center; margin-top: 50px;">
+    <div class="g_id_signin"
+      data-type="standard"
+      data-size="large"
+      data-theme="outline"
+      data-text="sign_in_with"
+      data-shape="rectangular"
+      data-logo_alignment="right"
+      data-width="100">
+    </div>
+  </div>
 
   <ul id="dancer-list"></ul>
 
   <script>
-    // Google Sign-In callback
     function handleCredentialResponse(response) {
       const jwt = response.credential;
       const payload = JSON.parse(atob(jwt.split('.')[1]));
       console.log("User info:", payload);
-      alert(`Welcome ${payload.name}!`);
+      // alert(`Welcome ${payload.name}!`);
 
-      // שמירת הטוקן ופרטי המשתמש ב-localStorage
       localStorage.setItem('token', jwt);
       localStorage.setItem('userName', payload.name);
 
-      // שליחת הטוקן לשרת לצורך אימות (לפי מה שכבר עשית)
       fetch('https://zoukjourney-back-end.onrender.com/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -65,11 +69,9 @@
         console.error("Login error:", err);
       });
 
-      // עדכון הממשק אחרי התחברות
       updateUIAfterLogin(payload.name);
     }
 
-    // טעינת הדף - בדיקת התחברות קיימת
     window.onload = function() {
       const token = localStorage.getItem('token');
       const userName = localStorage.getItem('userName');
@@ -80,50 +82,45 @@
       }
     };
 
-    // עדכון UI אחרי התחברות
     function updateUIAfterLogin(userName) {
-      // הסתרת כפתור ההתחברות של גוגל
       const googleButton = document.querySelector('.g_id_signin');
       if (googleButton) googleButton.style.display = 'none';
 
-      // יצירת והצגת הודעת ברוך הבא
       let welcomeDiv = document.getElementById('welcome-message');
       if (!welcomeDiv) {
         welcomeDiv = document.createElement('div');
         welcomeDiv.id = 'welcome-message';
         document.body.insertBefore(welcomeDiv, document.body.firstChild);
       }
-      welcomeDiv.textContent = `שלום, ${userName}!`;
+      welcomeDiv.textContent = `Hi, ${userName}!`;
 
-      // יצירת כפתור התנתקות אם לא קיים
       let logoutBtn = document.getElementById('logout-btn');
       if (!logoutBtn) {
         logoutBtn = document.createElement('button');
         logoutBtn.id = 'logout-btn';
-        logoutBtn.textContent = 'התנתק';
+        logoutBtn.textContent = 'Logout';
         welcomeDiv.after(logoutBtn);
         logoutBtn.addEventListener('click', logout);
+        const buttonsContainer = document.querySelector('.buttons-container');
+        if (buttonsContainer) buttonsContainer.style.display = 'block';
       }
     }
 
-    // פונקציית התנתקות
     function logout() {
-      // מחיקת נתוני התחברות
       localStorage.removeItem('token');
       localStorage.removeItem('userName');
 
-      // החזרת כפתור ההתחברות
       const googleButton = document.querySelector('.g_id_signin');
       if (googleButton) googleButton.style.display = 'block';
 
-      // הסרת הודעת ברוך הבא וכפתור ההתנתקות
       const welcomeDiv = document.getElementById('welcome-message');
       if (welcomeDiv) welcomeDiv.remove();
       const logoutBtn = document.getElementById('logout-btn');
       if (logoutBtn) logoutBtn.remove();
+      const buttonsContainer = document.querySelector('.buttons-container');
+      if (buttonsContainer) buttonsContainer.style.display = 'none';
     }
 
-    // טעינת רקדנים מהשרת
     function loadDancers() {
       fetch('https://zoukjourney-back-end.onrender.com/api/dancers')
         .then(response => response.json())
@@ -139,16 +136,19 @@
         .catch(error => console.error('Error loading dancers:', error));
     }
 
-    // מאזיני אירועים לכפתורים
-    document.getElementById('load-btn').addEventListener('click', loadDancers);
+    // document.getElementById('load-btn').addEventListener('click', loadDancers);
 
-    document.getElementById('next-page-btn').addEventListener('click', () => {
-      window.location.href = 'about.html';
+    // document.getElementById('next-page-btn').addEventListener('click', () => {
+    //   window.location.href = 'about.html';
+    // });
+    
+    document.getElementById('basic-step-btn').addEventListener('click', () => {
+      window.location.href = 'basic-step.html';
     });
-
-    document.getElementById('third-page-btn').addEventListener('click', () => {
-      window.location.href = 'third.html';
-    });
+    
+    // document.getElementById('third-page-btn').addEventListener('click', () => {
+    //   window.location.href = 'third.html';
+    // });
 
   </script>
 </body>
