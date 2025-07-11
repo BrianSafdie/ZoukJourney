@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css" />
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  
 </head>
 
 <body>
@@ -22,9 +21,6 @@
   </style>
 
   <div class="buttons-container">
-    <!-- <button id="load-btn">Load Dancers</button> -->
-    <!-- <button id="next-page-btn">Go to About Page</button> -->
-    <!-- <button id="third-page-btn">Go to Third Page</button> -->
     <button id="basic-step-btn">Start Learning The Basic Step</button>
   </div>
 
@@ -51,12 +47,7 @@
   <script>
     function handleCredentialResponse(response) {
       const jwt = response.credential;
-      const payload = JSON.parse(atob(jwt.split('.')[1]));
-      console.log("User info:", payload);
-      // alert(`Welcome ${payload.name}!`);
-
       localStorage.setItem('token', jwt);
-      localStorage.setItem('userName', payload.name);
 
       fetch('https://zoukjourney-back-end.onrender.com/api/login', {
         method: 'POST',
@@ -66,12 +57,13 @@
       .then(res => res.json())
       .then(data => {
         console.log("Login response:", data);
+        const userName = data.message.replace('Welcome ', '').replace('!', '');
+        localStorage.setItem('userName', userName);
+        updateUIAfterLogin(userName);
       })
       .catch(err => {
         console.error("Login error:", err);
       });
-
-      updateUIAfterLogin(payload.name);
     }
 
     window.onload = function() {
@@ -147,11 +139,6 @@
     document.getElementById('basic-step-btn').addEventListener('click', () => {
       window.location.href = 'basic-step.html';
     });
-    
-    // document.getElementById('third-page-btn').addEventListener('click', () => {
-    //   window.location.href = 'third.html';
-    // });
-
   </script>
 </body>
 </html>
