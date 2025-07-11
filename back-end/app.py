@@ -1,6 +1,7 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Response
 from flask_cors import CORS
 import os
+import json
 from google.oauth2 import id_token
 from google.auth.transport import requests as grequests
 
@@ -33,12 +34,17 @@ def login():
         user_email = idinfo['email']
         user_name = idinfo.get('name')
 
-        # כאן אפשר לשמור את המשתמש במסד נתונים או לנהל סשן
-        return jsonify({
+        # בניית תגובה עם קידוד עברית תקין
+        response_data = {
             "message": f"Welcome {user_name}!",
             "email": user_email,
             "user_id": user_id
-        })
+        }
+
+        return Response(
+            json.dumps(response_data, ensure_ascii=False),
+            content_type='application/json; charset=utf-8'
+        )
 
     except ValueError:
         # הטוקן אינו תקין

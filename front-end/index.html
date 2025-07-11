@@ -123,20 +123,20 @@
       if (buttonsContainer) buttonsContainer.style.display = 'none';
     }
 
-    function loadDancers() {
-      fetch('https://zoukjourney-back-end.onrender.com/api/dancers')
-        .then(response => response.json())
-        .then(data => {
-          const list = document.getElementById('dancer-list');
-          list.innerHTML = '';
-          data.forEach(dancer => {
-            const li = document.createElement('li');
-            li.textContent = `${dancer.name} - ${dancer.level}`;
-            list.appendChild(li);
-          });
-        })
-        .catch(error => console.error('Error loading dancers:', error));
-    }
+    // function loadDancers() {
+    //   fetch('https://zoukjourney-back-end.onrender.com/api/dancers')
+    //     .then(response => response.json())
+    //     .then(data => {
+    //       const list = document.getElementById('dancer-list');
+    //       list.innerHTML = '';
+    //       data.forEach(dancer => {
+    //         const li = document.createElement('li');
+    //         li.textContent = `${dancer.name} - ${dancer.level}`;
+    //         list.appendChild(li);
+    //       });
+    //     })
+    //     .catch(error => console.error('Error loading dancers:', error));
+    // }
 
     // document.getElementById('load-btn').addEventListener('click', loadDancers);
 

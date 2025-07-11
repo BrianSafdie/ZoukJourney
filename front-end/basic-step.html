@@ -13,9 +13,7 @@
     }
 
     .status-msg {
-      margin: 20px 0;
-      font-weight: bold;
-    }
+      margin: 20px 0;      font-weight: bold;    }
 
     .btn {
       padding: 12px 24px;
@@ -24,16 +22,26 @@
       border-radius: 8px;
       background-color: #333;
       color: white;
-      transition: 0.3s;
-    }
+      transition: 0.3s;}
 
-    .btn:hover:enabled {
-      background-color: #555;
-    }
+    .btn:hover:enabled {background-color: #555;}
+    .hidden-body {display: none;}
+    
   </style>
 </head>
-<body>
+<body class="hidden-body">
+  <script>
+  // const userName = localStorage.getItem("userName");
+  // if (!userName) {
+  //   // המשתמש לא מחובר – מעבירים לעמוד ההתחברות
+  //   window.location.href = "index.html";
+  // }
+
+  </script>
+
   <div class="container">
+    <p id="greeting"></p>
+
     <h1>Basic Step – Lesson</h1>
     <p>In this lesson, you’ll learn the foundational movement of Brazilian Zouk: the Basic Step. Watch the video to understand rhythm, weight changes, and body coordination.</p>
     <p>Watch the video. Once you've watched 85% of it, you'll be able to take the quiz.</p>
@@ -92,6 +100,9 @@
     const tag = document.createElement("script");
     tag.src = "https://www.youtube.com/iframe_api";
     document.head.appendChild(tag);
+    
   </script>
+  <script src="auth.js"></script>
+
 </body>
 </html>
